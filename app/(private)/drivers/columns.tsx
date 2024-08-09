@@ -1,0 +1,234 @@
+"use client";
+
+import { Button } from "@/components/ui/button";
+import { ColumnDef } from "@tanstack/react-table";
+import { ArrowUpDown, UserCog } from "lucide-react";
+import moment from "moment";
+import { Switch } from "@/components/ui/switch";
+import React from "react";
+import Image from "next/image";
+import StatusToggle from "@/components/StatusToggle/StatusToggle";
+import Link from "next/link";
+
+// This type is used to define the shape of our data.
+// You can use a Zod schema here if you want.
+export type DriversData = {
+  id: string;
+  imageUrl: string;
+  name: string;
+  dob: string;
+  contactInfo: {
+    email: string;
+    phone: string;
+  };
+  address: {
+    state: string;
+    zipCode: string;
+    addressZipCode: string;
+    addressType: number;
+  };
+  amountEarned: number;
+  status: number;
+};
+
+export const columns: ColumnDef<DriversData>[] = [
+  {
+    accessorKey: "id",
+    header: "ID",
+    cell: ({ row }) => row.getValue("id"),
+  },
+  {
+    accessorKey: "imageUrl",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Profile Image
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const imageUrl: any = row.getValue("imageUrl");
+      return (
+        <Image
+          src={imageUrl}
+          alt="profile-image"
+          width={50}
+          height={50}
+          className="w-[50px] h-[50px] rounded-full"
+        />
+      );
+    },
+  },
+  {
+    accessorKey: "name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+  },
+  {
+    accessorKey: "contactInfo",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Contact Info
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const contactInfo: any = row.getValue("contactInfo");
+      return (
+        <div>
+          {contactInfo.email && (
+            <div>
+              <strong>Email:</strong> {contactInfo.email}
+            </div>
+          )}
+          {contactInfo.phone && (
+            <div>
+              <strong>Phone number:</strong> {contactInfo.phone}
+            </div>
+          )}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "dob",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Date of birth
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const dob: string = row.getValue("dob");
+      const formattedDate = moment(dob, "DD-MM-YYYY").format("YYYY-MM-DD");
+      return <div>{formattedDate}</div>;
+    },
+  },
+  {
+    accessorKey: "address",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Address
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const address: any = row.getValue("address");
+      return (
+        <div>
+          <div>
+            <strong>State:</strong> {address.state}
+          </div>
+          <div>
+            <strong>Zip code:</strong> {address.zipCode}
+          </div>
+          {address.addressZipCode && (
+            <div>
+              <strong>Address zip code:</strong> {address.addressZipCode}
+            </div>
+          )}
+          {address.addressType && (
+            <div>
+              <strong>Address type:</strong>{" "}
+              {address.addressType == 1 ? "Personal use" : "Company use"}
+            </div>
+          )}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "status",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Status
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const status: number = row.getValue("status");
+      const id: string = row.getValue("id");
+      return <StatusToggle id={id} status={status} />;
+    },
+  },
+
+  {
+    accessorKey: "amountEarned",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Amount Earned
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const amount = parseFloat(row.getValue("amountEarned"));
+      const formatted = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(amount);
+
+      return <div>{formatted}</div>;
+    },
+  },
+  {
+    accessorKey: "actions",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          // className="hover:bg-none! bg-transparent!"
+        >
+          Actions
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const id: string = row.getValue("id");
+      return (
+        <Link href={`/drivers/${id}`}>
+          <UserCog />
+        </Link>
+      );
+    },
+  },
+];
