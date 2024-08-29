@@ -67,6 +67,7 @@ const Pricings = () => {
       superLargeBase == 0
     ) {
       toast.error("Zero is not allowed for any value");
+      return;
     }
 
     const numericValues: any = {};
