@@ -15,19 +15,17 @@ const authenticatedMiddleware = async (request: NextRequest) => {
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
     headers.append("Authorization", "Bearer " + authSession);
-    const response = await fetch(`${api_url}/admin/getAllCustomers`, {
+    const response = await fetch(`${api_url}/admin/getPricings`, {
       method: "GET",
       headers: headers,
     });
 
-
-    
     if (!response.ok) {
       return NextResponse.redirect(url);
     }
-    
+
     const responseData = await response.json();
-  
+
     if (responseData.success) {
       return NextResponse.next();
     }
@@ -40,6 +38,31 @@ const authenticatedMiddleware = async (request: NextRequest) => {
 const middleware = (request: NextRequest) => {
   const excludedPaths = ["/auth/signin", "/auth/forget_password"];
   const isImage = request.nextUrl.pathname.includes("/images/");
+
+  if (excludedPaths.includes(request.nextUrl.pathname)) {
+    const authSession = request.cookies.get("token")?.value;
+    if (authSession) {
+      const baseUrl = request.nextUrl.origin;
+      const previousPage = "/";
+
+      const redirectUrl = new URL(previousPage, baseUrl);
+
+      return NextResponse.redirect(redirectUrl);
+    }
+  }
+
+  if (request.nextUrl.pathname.includes("/logout")) {
+    const baseUrl = request.nextUrl.origin;
+    const previousPage = "/auth/signin";
+    const redirectUrl = new URL(previousPage, baseUrl);
+    const response = NextResponse.redirect(redirectUrl);
+
+    response.cookies.delete("token");
+    response.headers.set('Cache-Control', 'no-store, must-revalidate');
+    
+    return response
+  }
+
   if (!excludedPaths.includes(request.nextUrl.pathname) && !isImage) {
     return authenticatedMiddleware(request);
   }

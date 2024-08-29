@@ -2,14 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
-import moment from "moment";
+import { ArrowUpDown, UserCog } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import React from "react";
-// import StatusToggle from "@/components/StatusToggle/StatusToggle";
+import { getFormattedDate } from "@/lib/utils";
+import { changeUserAccountStatus } from "@/actions/customers";
+import { toast } from "react-toastify";
+import Link from "next/link";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
 export type CustomersData = {
   id: string;
   name: string;
@@ -94,7 +94,7 @@ export const columns: ColumnDef<CustomersData>[] = [
     },
     cell: ({ row }) => {
       const dob: string = row.getValue("dob");
-      const formattedDate = moment(dob, "DD-MM-YYYY").format("YYYY-MM-DD");
+      const formattedDate = getFormattedDate(dob);
       return <div>{formattedDate}</div>;
     },
   },
@@ -182,8 +182,32 @@ export const columns: ColumnDef<CustomersData>[] = [
       return <div>{formatted}</div>;
     },
   },
+  {
+    accessorKey: "actions",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          // className="hover:bg-none! bg-transparent!"
+        >
+          Actions
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const id: string = row.getValue("id");
+      return (
+        <div className="flex justify-center">
+          <Link href={`/customers/${id}`}>
+            <UserCog />
+          </Link>
+        </div>
+      );
+    },
+  },
 ];
-
 
 const StatusToggle: React.FC<{ id: string; status: number }> = ({
   id,
@@ -191,10 +215,16 @@ const StatusToggle: React.FC<{ id: string; status: number }> = ({
 }) => {
   const [isChecked, setIsChecked] = React.useState(status === 1);
 
+  const handleOnChange = async (newStatus: boolean) => {
+    const response = await changeUserAccountStatus(id, newStatus ? 1 : 2);
+    toast.success(response?.message);
+    setIsChecked(newStatus);
+  };
+
   return (
     <Switch
       checked={isChecked}
-      onCheckedChange={(newStatus) => setIsChecked(newStatus)}
+      onCheckedChange={(newStatus) => handleOnChange(newStatus)}
       className="data-[state=checked]:bg-orange-500"
     />
   );

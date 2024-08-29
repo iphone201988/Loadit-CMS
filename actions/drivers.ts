@@ -20,14 +20,140 @@ export const getAllDrivers = async (page: number, limit: number) => {
       }
     );
 
+    const { drivers, total } = response.data;
+
+    const data = drivers.map((driver: any) => ({
+      id: driver._id,
+      imageUrl: driver.driverImage,
+      name: driver.name,
+      contactInfo: { email: driver.email, phone: driver.phone },
+      dob: driver.dob,
+      address: {
+        state: driver.address.state,
+        zipCode: driver.address.zipCode,
+        addressZipCode: driver.address.addressZipCode,
+        addressType: driver.address.addressType,
+      },
+      status: driver.status,
+      amountEarned: driver.amountEarned,
+      isDocumentsVerified: driver.isDocumentsVerified,
+    }));
+
     if (response.data.success) {
       return {
         status: response.status,
-        data: { drivers: response.data.drivers, total: response.data.total },
+        data,
+        total,
       };
     }
-    redirect("/auth/sign", RedirectType.replace); 
+    redirect("/auth/sign", RedirectType.replace);
   } catch (error) {
     redirect("/auth/sign", RedirectType.replace);
+  }
+};
+
+export const getDriverVehicleDocuments = async (driverId: string) => {
+  const url = process.env.API_URL;
+  try {
+    const token = cookies().get("token")?.value;
+    if (!token) {
+      redirect("/auth/sigin", RedirectType.replace);
+    }
+    const response = await axios.get(
+      `${url}/admin/getDriverVehichleDetails/${driverId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.data.success) {
+      return {
+        status: response.status,
+        data: { driver: response.data.driver },
+      };
+    }
+    redirect("/auth/sign", RedirectType.replace);
+  } catch (error) {
+    redirect("/auth/signin", RedirectType.replace);
+  }
+};
+
+export const approveDriverVehicleDocuments = async (driverId: string) => {
+  const url = process.env.API_URL;
+  try {
+    const token = cookies().get("token")?.value;
+    if (!token) {
+      redirect("/auth/sigin", RedirectType.replace);
+    }
+    const response = await axios.patch(
+      `${url}/admin/approveDriverDocuments/${driverId}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.data.success) {
+      return {
+        status: response.status,
+        message: response.data.message,
+      };
+    }
+    redirect("/auth/sign", RedirectType.replace);
+  } catch (error) {
+    redirect("/auth/signin", RedirectType.replace);
+  }
+};
+
+export const getJobs = async (query: string, page: number, limit: number) => {
+  const url = process.env.API_URL;
+  try {
+    const token = cookies().get("token")?.value;
+    if (!token) redirect("/auth/sigin", RedirectType.replace);
+
+    const response = await axios.get(
+      `${url}/admin/getJobs?${query}&page=${page}&limit=${limit}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.data.success) {
+      const { jobs, total } = response.data;
+
+      const data = jobs.map((job: any) => ({
+        id: job._id,
+        title: job.title,
+        amount: job.amount,
+        pickupDetails: {
+          pickUpLocation: job.pickUpLocation,
+          pickUpDate: job.pickUpDate,
+          pickUpTime: job.pickUpTime,
+        },
+        dropOffDetails: {
+          dropOffDate: job.dropOffDate,
+          dropOffTime: job.dropOffTime,
+          dropOffs: job.dropOffs,
+        },
+        jobType: job.jobType,
+        orderNo: job.orderNo,
+        deliveryStatus: job.deliveryStatus,
+      }));
+
+      return {
+        status: response.status,
+        data,
+        total,
+      };
+    }
+    redirect("/auth/sign", RedirectType.replace);
+  } catch (error) {
+    redirect("/auth/signin", RedirectType.replace);
   }
 };

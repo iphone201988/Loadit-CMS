@@ -1,14 +1,8 @@
 import type { Metadata } from "next";
 import "../globals.css";
-import Image from "next/image";
-import {
-  CarFront,
-  LayoutDashboard,
-  LockKeyhole,
-  LogOut,
-  Users,
-} from "lucide-react";
-import Link from "next/link";
+
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import Navbar from "@/components/Navbar/Navbar";
 
 export const metadata: Metadata = {
   title: "Loadit Dashboard",
@@ -21,54 +15,27 @@ const CommonLayout = ({
   children: React.ReactNode;
 }>) => {
   return (
-    <div className="h-full flex">
-      <div className="w-80 h-full bg-orange-500 text-white">
-        <div className="flex justify-center items-center bg-zinc-700 p-2">
-          <Image
-            src="/images/logo.png"
-            alt="Loadit logo"
-            width={150}
-            height={40}
-          />
-        </div>
-        <div className="my-5">
-          <ul className="text-xl flex justify-center items-center">
-            <div className="flex flex-col items-start">
-              <Link href="/dashboard">
-                <li className="flex justify-center items-center my-4">
-                  <LayoutDashboard className="mr-2" />
-                  Dashboard
-                </li>
-              </Link>
-              <Link href="/customers">
-                <li className="flex items-center justify-center my-4">
-                  <Users className="mr-2" />
-                  Customers
-                </li>
-              </Link>
-              <Link href="/drivers">
-                <li className="flex justify-center items-center my-4">
-                  <CarFront className="mr-2" />
-                  Drivers
-                </li>
-              </Link>
-              <Link href="/changePassword">
-                <li className="flex items-center justify-center my-4">
-                  <LockKeyhole className="mr-2" />
-                  Change Password
-                </li>
-              </Link>
-              <Link href="/logout">
-                <li className="flex items-center justify-center my-4">
-                  <LogOut className="mr-2" />
-                  Logout
-                </li>
-              </Link>
+    <div className="h-full flex max-lg:flex-col">
+      <Sheet>
+        <SheetTrigger className="hidden max-lg:block p-0">
+          <div className="border-b p-2 flex justify-start shadow-xl">
+            <div className="border border-black p-1 px-2 rounded-sm">
+              <div className="w-[20px] bg-black h-[3px] my-1 rounded-lg"></div>
+              <div className="w-[20px] bg-black h-[3px] my-1 rounded-lg"></div>
+              <div className="w-[20px] bg-black h-[3px] my-1 rounded-lg"></div>
             </div>
-          </ul>
-        </div>
+          </div>
+        </SheetTrigger>
+        <SheetContent side="left" className="p-0 m-0 w-fit border-r-0 sheet">
+          <Navbar />
+        </SheetContent>
+      </Sheet>
+      <div className="max-lg:hidden">
+        <Navbar />
       </div>
-      <div className="p-2 w-[calc(100%-20rem)] h-full">{children}</div>
+      <div className="p-4 w-[calc(100%-20rem)] max-lg:w-full h-full max-h-screen overflow-y-auto">
+        {children}
+      </div>
     </div>
   );
 };

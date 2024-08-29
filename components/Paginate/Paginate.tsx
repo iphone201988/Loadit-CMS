@@ -1,7 +1,5 @@
 "use client";
-import Link from "next/link";
 import { Button } from "../ui/button";
-import BeatLoader from "react-spinners/BeatLoader";
 import { Dispatch, SetStateAction } from "react";
 
 const Paginate = ({
@@ -22,6 +20,9 @@ const Paginate = ({
   const isNextPageAvailable = nextPage <= totalPages;
   const previousPage = page - 1;
   const isPreviousPageAvailable = previousPage >= 1;
+
+  if (!isPreviousPageAvailable && !isNextPageAvailable) return null;
+
   return (
     <>
       {/* <BeatLoader /> */}

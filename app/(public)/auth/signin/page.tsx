@@ -39,6 +39,7 @@ const formSchema = z.object({
 const SignInPage = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -51,12 +52,14 @@ const SignInPage = () => {
     const { email, password } = values;
 
     const response = await login(email, password);
+    // router.prefetch("/dashboard");
     if (response.status == 200) {
-      console.log("response::::",response)
-      toast.success(response.message); 
-      return router.replace("/dashboard");
+      console.log("response::::", response);
+      toast.success(response.message);
+      router.replace("/");
+    } else {
+      toast.error(response.message);
     }
-    toast.error(response.message);
   };
 
   return (

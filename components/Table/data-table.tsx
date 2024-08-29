@@ -35,7 +35,7 @@ export function DataTable<TData, TValue>({
     React.useState<VisibilityState>({
       id: false,
     });
-    
+
   const table = useReactTable({
     data,
     columns,
@@ -79,7 +79,7 @@ export function DataTable<TData, TValue>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
-                className=" whitespace-pre-line text-center"
+                className="whitespace-pre-line text-center"
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>

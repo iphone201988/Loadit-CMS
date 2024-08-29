@@ -2,16 +2,15 @@
 
 import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, UserCog } from "lucide-react";
-import moment from "moment";
+import { ArrowUpDown, BadgeCheck, BadgeX, UserCog } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import React from "react";
 import Image from "next/image";
-import StatusToggle from "@/components/StatusToggle/StatusToggle";
 import Link from "next/link";
+import { getFormattedDate } from "@/lib/utils";
+import { changeUserAccountStatus } from "@/actions/customers";
+import { toast } from "react-toastify";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
 export type DriversData = {
   id: string;
   imageUrl: string;
@@ -29,6 +28,7 @@ export type DriversData = {
   };
   amountEarned: number;
   status: number;
+  isDocumentsVerified: boolean;
 };
 
 export const columns: ColumnDef<DriversData>[] = [
@@ -53,13 +53,15 @@ export const columns: ColumnDef<DriversData>[] = [
     cell: ({ row }) => {
       const imageUrl: any = row.getValue("imageUrl");
       return (
-        <Image
-          src={imageUrl}
-          alt="profile-image"
-          width={50}
-          height={50}
-          className="w-[50px] h-[50px] rounded-full"
-        />
+        <div className="flex justify-center">
+          <Image
+            src={imageUrl}
+            alt="profile-image"
+            width={50}
+            height={50}
+            className="w-[50px] h-[50px] rounded-full"
+          />
+        </div>
       );
     },
   },
@@ -123,7 +125,7 @@ export const columns: ColumnDef<DriversData>[] = [
     },
     cell: ({ row }) => {
       const dob: string = row.getValue("dob");
-      const formattedDate = moment(dob, "DD-MM-YYYY").format("YYYY-MM-DD");
+      const formattedDate = getFormattedDate(dob);
       return <div>{formattedDate}</div>;
     },
   },
@@ -184,6 +186,28 @@ export const columns: ColumnDef<DriversData>[] = [
       return <StatusToggle id={id} status={status} />;
     },
   },
+  {
+    accessorKey: "isDocumentsVerified",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Document verified
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const status: number = row.getValue("isDocumentsVerified");
+      return (
+        <div className="flex justify-center">
+          {status ? <BadgeCheck color="#1d873c" /> : <BadgeX color="#ff0000" />}
+        </div>
+      );
+    },
+  },
 
   {
     accessorKey: "amountEarned",
@@ -225,10 +249,33 @@ export const columns: ColumnDef<DriversData>[] = [
     cell: ({ row }) => {
       const id: string = row.getValue("id");
       return (
-        <Link href={`/drivers/${id}`}>
-          <UserCog />
-        </Link>
+        <div className="flex justify-center">
+          <Link href={`/drivers/${id}`}>
+            <UserCog />
+          </Link>
+        </div>
       );
     },
   },
 ];
+
+const StatusToggle: React.FC<{ id: string; status: number }> = ({
+  id,
+  status,
+}) => {
+  const [isChecked, setIsChecked] = React.useState(status === 1);
+
+  const handleOnChange = async (newStatus: boolean) => {
+    const response = await changeUserAccountStatus(id, newStatus ? 1 : 2);
+    toast.success(response?.message);
+    setIsChecked(newStatus);
+  };
+
+  return (
+    <Switch
+      checked={isChecked}
+      onCheckedChange={(newStatus) => handleOnChange(newStatus)}
+      className="data-[state=checked]:bg-orange-500"
+    />
+  );
+};
