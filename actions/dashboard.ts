@@ -25,6 +25,7 @@ export const getDashboardStats = async () => {
         pendingJobs: response.data.pendingJobs,
         canceledJobs: response.data.canceledJobs,
         completedJobs: response.data.completedJobs,
+        totalPayments: response.data.totalPayments,
         totalUsersChange: response.data.percentageChanges.totalUsersChange,
         activeDriversChange: response.data.percentageChanges.activeDriversChange,
         activeCustomersChange: response.data.percentageChanges.activeCustomersChange,
@@ -32,6 +33,7 @@ export const getDashboardStats = async () => {
         pendingJobsChange: response.data.percentageChanges.pendingJobsChange,
         canceledJobsChange: response.data.percentageChanges.canceledJobsChange,
         completedJobsChange: response.data.percentageChanges.completedJobsChange,
+        previousMonthTotalPayments: response.data.percentageChanges.previousMonthTotalPayments,
       };
     }
 

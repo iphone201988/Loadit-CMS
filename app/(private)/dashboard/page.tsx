@@ -27,10 +27,10 @@ const Dashboard = () => {
       {response && (
         <div className="flex w-full flex-wrap mt-5 justify-center">
           <DashboardCard
-            heading="Total revenue"
+            heading="Total amount spent"
             type="revenue"
-            data="$1245"
-            percentageChange={response?.totalUsersChange}
+            data={`$ ${response?.totalPayments}`}
+            percentageChange={response?.previousMonthTotalPayments}
           />
           <DashboardCard
             heading="Total users"
@@ -39,13 +39,13 @@ const Dashboard = () => {
             percentageChange={response?.totalUsersChange}
           />
           <DashboardCard
-            heading="Active Drivers"
+            heading="Active drivers"
             type="drivers"
             data={response?.activeDrivers}
             percentageChange={response?.activeDriversChange}
           />
           <DashboardCard
-            heading="Active Customers"
+            heading="Active customers"
             type="users"
             data={response?.activeCustomers}
             percentageChange={response?.activeCustomersChange}
