@@ -37,7 +37,7 @@ const DriverDetails = ({ params }: { params: { id: string } }) => {
               userId={userId}
               url={`/drivers/${userId}`}
               columns={paymentColumns}
-              limit={10}
+              limit={limit}
             />
           </TabsContent>
         </Tabs>

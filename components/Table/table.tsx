@@ -48,6 +48,7 @@ const TableComponent = ({
     }
     if (type == "payments") {
       response = await getUserPayments(userId!, page, limit);
+      console.log("response::::",response)
     }
 
     console.log("response.data", response?.data);
@@ -69,7 +70,11 @@ const TableComponent = ({
 
       <div className="w-full h-full relative">
         {heading && <div className="font-bold text-4xl my-4">{heading}</div>}
-        {data && <DataTable columns={columns} data={data} />}
+        {data && (
+          <div className="pb-[50px]">
+            <DataTable columns={columns} data={data} />
+          </div>
+        )}
         {data?.length > 0 && (
           <Paginate
             url={url}

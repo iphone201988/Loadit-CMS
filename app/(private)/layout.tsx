@@ -33,7 +33,7 @@ const CommonLayout = ({
       <div className="max-lg:hidden">
         <Navbar />
       </div>
-      <div className="p-4 w-[calc(100%-20rem)] max-lg:w-full h-full max-h-screen overflow-y-auto">
+      <div className="p-4 w-[calc(100%-20rem)] max-lg:w-full max-h-screen overflow-y-auto">
         {children}
       </div>
     </div>

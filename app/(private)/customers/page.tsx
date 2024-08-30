@@ -7,13 +7,13 @@ const Customers = () => {
   const limit = parseInt(process.env.NEXT_PUBLIC_PAGINATION_LIMIT!) || 5;
 
   return (
-    <TableComponent
-      heading="Customers"
-      type="customers"
-      url="/customers"
-      columns={columns}
-      limit={limit}
-    />
+      <TableComponent
+        heading="Customers"
+        type="customers"
+        url="/customers"
+        columns={columns}
+        limit={limit}
+      />
   );
 };
 

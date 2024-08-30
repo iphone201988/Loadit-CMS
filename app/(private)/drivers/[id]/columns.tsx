@@ -137,7 +137,8 @@ export const columns: ColumnDef<DriverJobsData>[] = [
           ) : (
             dropOffDetails.dropOffs.map((dropOff: any, i: number) => (
               <div key={i}>
-                <strong>DropOff Location {i+1}:</strong> {dropOff.dropOffLocation}
+                <strong>DropOff Location {i + 1}:</strong>{" "}
+                {dropOff.dropOffLocation}
               </div>
             ))
           )}
@@ -189,7 +190,7 @@ export const columns: ColumnDef<DriverJobsData>[] = [
           className={`flex items-center justify-center space-x-2 font-bold ${colorsMap[deliveryStatus]}`}
         >
           {deliveryStatus}
-          <Truck />
+          {deliveryStatus && <Truck />}
         </div>
       );
     },
