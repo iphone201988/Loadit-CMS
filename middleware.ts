@@ -4,10 +4,11 @@ const api_url = process.env.API_URL;
 
 const authenticatedMiddleware = async (request: NextRequest) => {
   const url = request.nextUrl.clone();
-  url.pathname = "/auth/signin";
+  url.pathname = "/admin/auth/signin";
 
   try {
     const authSession = request.cookies.get("token")?.value;
+    console.log("authSession:", authSession);
 
     if (!authSession) {
       return NextResponse.redirect(url);
@@ -36,7 +37,7 @@ const authenticatedMiddleware = async (request: NextRequest) => {
 };
 
 const middleware = (request: NextRequest) => {
-  const excludedPaths = ["/auth/signin", "/auth/forget_password"];
+  const excludedPaths = ["/admin/auth/signin", "/admin/auth/forget_password"];
   const isImage = request.nextUrl.pathname.includes("/images/");
 
   if (excludedPaths.includes(request.nextUrl.pathname)) {
@@ -58,9 +59,9 @@ const middleware = (request: NextRequest) => {
     const response = NextResponse.redirect(redirectUrl);
 
     response.cookies.delete("token");
-    response.headers.set('Cache-Control', 'no-store, must-revalidate');
-    
-    return response
+    response.headers.set("Cache-Control", "no-store, must-revalidate");
+
+    return response;
   }
 
   if (!excludedPaths.includes(request.nextUrl.pathname) && !isImage) {

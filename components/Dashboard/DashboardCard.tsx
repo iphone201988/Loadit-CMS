@@ -68,7 +68,7 @@ const DashboardCard = ({
           <div className="text-2xl">{data}</div>
           <CardDescription className="mt-1 flex items-center space-x-1">
             <span>{statIcon}</span>
-            <span>{percentageChange}% from last month</span>
+            <span>{Math.abs(percentageChange)}% from last month</span>
           </CardDescription>
         </CardContent>
       </Card>

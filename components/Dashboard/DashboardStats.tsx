@@ -1,36 +1,23 @@
 "use client";
-import { getDashboardStats } from "@/actions/dashboard";
-import DashboardCard from "@/components/Dashboard/DashboardCard";
-import { useEffect, useState } from "react";
-import BeatLoader from "react-spinners/BeatLoader";
 
-const Dashboard = () => {
-  const [response, setResponse] = useState<any>(null);
-  const [showLoader, setShowLoader] = useState<boolean>(true);
+import DashboardCard from "./DashboardCard";
 
-  useEffect(() => {
-    (async () => {
-      const response = await getDashboardStats();
-      setResponse(response);
-      setShowLoader(false);
-    })();
-  }, []);
 
+const DashboardStats = ({
+  statsResponse: response,
+}: {
+  statsResponse: any;
+}) => {
   return (
-    <div className={`w-full ${showLoader && "h-full"}`}>
+    <div className="w-full">
       <h1 className="font-bold text-4xl my-4">Dashboard</h1>
-      {showLoader && (
-        <div className="flex justify-center items-center h-full">
-          <BeatLoader />
-        </div>
-      )}
       {response && (
         <div className="flex w-full flex-wrap mt-5 justify-center">
           <DashboardCard
             heading="Total amount spent"
             type="revenue"
             data={`$ ${response?.totalPayments}`}
-            percentageChange={response?.previousMonthTotalPayments}
+            percentageChange={response?.totalPaymentsChange}
           />
           <DashboardCard
             heading="Total users"
@@ -80,4 +67,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default DashboardStats;

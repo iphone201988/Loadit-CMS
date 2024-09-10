@@ -10,7 +10,13 @@ import { getUserPayments } from "@/actions/common";
 
 interface TableProps {
   heading?: string;
-  type: "customers" | "drivers" | "driverJobs" | "payments" | "customerJobs";
+  type:
+    | "customers"
+    | "drivers"
+    | "driverJobs"
+    | "payments"
+    | "customerJobs"
+    | "jobs";
   userId?: string;
   url: string;
   columns: any;
@@ -35,10 +41,13 @@ const TableComponent = ({
     let response;
 
     if (type == "driverJobs") {
-      response = await getJobs(`driverId=${userId}`, page, limit);
+      response = await getJobs(page, limit, `driverId=${userId}`);
     }
     if (type == "customerJobs") {
-      response = await getJobs(`customerId=${userId}`, page, limit);
+      response = await getJobs(page, limit, `customerId=${userId}`);
+    }
+    if (type == "jobs") {
+      response = await getJobs(page, limit);
     }
     if (type == "drivers") {
       response = await getAllDrivers(page, limit);
@@ -48,7 +57,7 @@ const TableComponent = ({
     }
     if (type == "payments") {
       response = await getUserPayments(userId!, page, limit);
-      console.log("response::::",response)
+      console.log("response::::", response);
     }
 
     console.log("response.data", response?.data);

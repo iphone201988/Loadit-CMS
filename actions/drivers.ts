@@ -109,7 +109,7 @@ export const approveDriverVehicleDocuments = async (driverId: string) => {
   }
 };
 
-export const getJobs = async (query: string, page: number, limit: number) => {
+export const getJobs = async (page: number, limit: number, query?: string) => {
   const url = process.env.API_URL;
   try {
     const token = cookies().get("token")?.value;

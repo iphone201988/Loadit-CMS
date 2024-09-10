@@ -1,5 +1,6 @@
 import Link from "next/link";
 import {
+  BriefcaseBusiness,
   CarFront,
   DollarSign,
   LayoutDashboard,
@@ -23,37 +24,43 @@ const Navbar = () => {
       <div className="my-5">
         <ul className="text-xl flex justify-center items-center">
           <div className="flex flex-col items-start">
-            <Link href="/dashboard">
+            <Link href="/admin/dashboard">
               <li className="flex justify-center items-center my-4">
                 <LayoutDashboard className="mr-2" />
                 Dashboard
               </li>
             </Link>
-            <Link href="/customers">
+            <Link href="/admin/customers">
               <li className="flex items-center justify-center my-4">
                 <Users className="mr-2" />
                 Customers
               </li>
             </Link>
-            <Link href="/drivers">
+            <Link href="/admin/drivers">
               <li className="flex justify-center items-center my-4">
                 <CarFront className="mr-2" />
                 Drivers
               </li>
             </Link>
-            <Link href="/pricings">
+            <Link href="/admin/jobs">
+              <li className="flex justify-center items-center my-4">
+                <BriefcaseBusiness className="mr-2" />
+                Jobs
+              </li>
+            </Link>
+            <Link href="/admin/pricings">
               <li className="flex justify-center items-center my-4">
                 <DollarSign className="mr-2" />
                 Manage Pricings
               </li>
             </Link>
-            <Link href="/change-password">
+            <Link href="/admin/change-password">
               <li className="flex items-center justify-center my-4">
                 <LockKeyhole className="mr-2" />
                 Change Password
               </li>
             </Link>
-            <a href="/logout">
+            <a href="/admin/logout">
               <li className="flex items-center justify-center my-4">
                 <LogOut className="mr-2" />
                 Logout

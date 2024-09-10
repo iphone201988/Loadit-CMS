@@ -52,7 +52,7 @@ const SignInPage = () => {
     const { email, password } = values;
 
     const response = await login(email, password);
-    // router.prefetch("/dashboard");
+    // router.prefetch("/admin/dashboard");
     if (response.status == 200) {
       console.log("response::::", response);
       toast.success(response.message);
