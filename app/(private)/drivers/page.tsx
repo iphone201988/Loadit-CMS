@@ -8,7 +8,7 @@ const Drivers = () => {
     <TableComponent
       heading="Drivers"
       type="drivers"
-      url="/admin/drivers"
+      url="/drivers"
       columns={columns}
       limit={limit}
     />

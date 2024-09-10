@@ -200,7 +200,7 @@ export const columns: ColumnDef<CustomersData>[] = [
       const id: string = row.getValue("id");
       return (
         <div className="flex justify-center">
-          <Link href={`/admin/customers/${id}`}>
+          <Link href={`/customers/${id}`}>
             <UserCog />
           </Link>
         </div>

@@ -4,7 +4,7 @@ const api_url = process.env.API_URL;
 
 const authenticatedMiddleware = async (request: NextRequest) => {
   const url = request.nextUrl.clone();
-  url.pathname = "/admin/auth/signin";
+  url.pathname = "/auth/signin";
 
   try {
     const authSession = request.cookies.get("token")?.value;
@@ -37,7 +37,7 @@ const authenticatedMiddleware = async (request: NextRequest) => {
 };
 
 const middleware = (request: NextRequest) => {
-  const excludedPaths = ["/admin/auth/signin", "/admin/auth/forget_password"];
+  const excludedPaths = ["/auth/signin", "/auth/forget_password"];
   const isImage = request.nextUrl.pathname.includes("/images/");
 
   if (excludedPaths.includes(request.nextUrl.pathname)) {
