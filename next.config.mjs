@@ -10,6 +10,11 @@ const nextConfig = {
         destination: "/admin/dashboard",
         permanent: true, // Set to true if this is a permanent redirect
       },
+      {
+        source: "/admin",
+        destination: "/admin/dashboard",
+        permanent: true, // Set to true if this is a permanent redirect
+      },
     ];
   },
 };

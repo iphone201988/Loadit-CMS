@@ -56,7 +56,7 @@ const SignInPage = () => {
     if (response.status == 200) {
       console.log("response::::", response);
       toast.success(response.message);
-      router.replace("/");
+      router.replace("/admin/dashboard");
     } else {
       toast.error(response.message);
     }
