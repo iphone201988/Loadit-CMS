@@ -10,7 +10,7 @@ const Jobs = () => {
     <TableComponent
       heading="Jobs"
       type="jobs"
-      url="/jobs"
+      url="/admin/jobs"
       columns={columns}
       limit={limit}
     />

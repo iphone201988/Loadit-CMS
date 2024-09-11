@@ -13,7 +13,7 @@ export const getUserPayments = async (
   try {
     const token = cookies().get("token")?.value;
 
-    if (!token) redirect("/auth/signin", RedirectType.replace);
+    if (!token) redirect("/admin/auth/signin", RedirectType.replace);
 
     const response = await axios.get(
       `${url}/admin/getUserPayments/${userId}?page=${page}&limit=${limit}`,
@@ -30,8 +30,8 @@ export const getUserPayments = async (
       };
     }
 
-    redirect("/auth/signin", RedirectType.replace);
+    redirect("/admin/auth/signin", RedirectType.replace);
   } catch (error) {
-    redirect("/auth/signin", RedirectType.replace);
+    redirect("/admin/auth/signin", RedirectType.replace);
   }
 };

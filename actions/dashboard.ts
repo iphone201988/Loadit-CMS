@@ -9,7 +9,7 @@ export const getDashboardStats = async () => {
   try {
     const token = cookies().get("token")?.value;
 
-    if (!token) redirect("/auth/signin", RedirectType.replace);
+    if (!token) redirect("/admin/auth/signin", RedirectType.replace);
 
     const response = await axios.get(`${url}/admin/getDashboardStats`, {
       headers: { Authorization: `Bearer ${token}` },
@@ -41,9 +41,9 @@ export const getDashboardStats = async () => {
       };
     }
 
-    redirect("/auth/signin", RedirectType.replace);
+    redirect("/admin/auth/signin", RedirectType.replace);
   } catch (error) {
-    redirect("/auth/signin", RedirectType.replace);
+    redirect("/admin/auth/signin", RedirectType.replace);
   }
 };
 
@@ -52,7 +52,7 @@ export const getChartData = async () => {
   try {
     const token = cookies().get("token")?.value;
 
-    if (!token) redirect("/auth/signin", RedirectType.replace);
+    if (!token) redirect("/admin/auth/signin", RedirectType.replace);
 
     const response = await axios.get(`${url}/admin/getChartData`, {
       headers: { Authorization: `Bearer ${token}` },
@@ -63,8 +63,8 @@ export const getChartData = async () => {
       return data;
     }
 
-    redirect("/auth/signin", RedirectType.replace);
+    redirect("/admin/auth/signin", RedirectType.replace);
   } catch (error) {
-    redirect("/auth/signin", RedirectType.replace);
+    redirect("/admin/auth/signin", RedirectType.replace);
   }
 };

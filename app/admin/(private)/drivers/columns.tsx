@@ -2,16 +2,18 @@
 
 import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, UserCog } from "lucide-react";
+import { ArrowUpDown, BadgeCheck, BadgeX, UserCog } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import React from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { getFormattedDate } from "@/lib/utils";
 import { changeUserAccountStatus } from "@/actions/customers";
 import { toast } from "react-toastify";
-import Link from "next/link";
 
-export type CustomersData = {
+export type DriversData = {
   id: string;
+  imageUrl: string;
   name: string;
   dob: string;
   contactInfo: {
@@ -24,15 +26,44 @@ export type CustomersData = {
     addressZipCode: string;
     addressType: number;
   };
-  amountSpent: number;
+  amountEarned: number;
   status: number;
+  isDocumentsVerified: boolean;
 };
 
-export const columns: ColumnDef<CustomersData>[] = [
+export const columns: ColumnDef<DriversData>[] = [
   {
     accessorKey: "id",
     header: "ID",
     cell: ({ row }) => row.getValue("id"),
+  },
+  {
+    accessorKey: "imageUrl",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Profile Image
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const imageUrl: any = row.getValue("imageUrl");
+      return (
+        <div className="flex justify-center">
+          <Image
+            src={imageUrl}
+            alt="profile-image"
+            width={50}
+            height={50}
+            className="w-[50px] h-[50px] rounded-full"
+          />
+        </div>
+      );
+    },
   },
   {
     accessorKey: "name",
@@ -152,28 +183,47 @@ export const columns: ColumnDef<CustomersData>[] = [
     cell: ({ row }) => {
       const status: number = row.getValue("status");
       const id: string = row.getValue("id");
-      return (
-        <div>
-          <StatusToggle id={id} status={status} />
-        </div>
-      );
+      return <StatusToggle id={id} status={status} />;
     },
   },
   {
-    accessorKey: "amountSpent",
+    accessorKey: "isDocumentsVerified",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Amount Spent
+          Document verified
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amountSpent"));
+      const status: number = row.getValue("isDocumentsVerified");
+      return (
+        <div className="flex justify-center">
+          {status ? <BadgeCheck color="#1d873c" /> : <BadgeX color="#ff0000" />}
+        </div>
+      );
+    },
+  },
+
+  {
+    accessorKey: "amountEarned",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Amount Earned
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const amount = parseFloat(row.getValue("amountEarned"));
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
@@ -200,7 +250,7 @@ export const columns: ColumnDef<CustomersData>[] = [
       const id: string = row.getValue("id");
       return (
         <div className="flex justify-center">
-          <Link href={`/customers/${id}`}>
+          <Link href={`/admin/drivers/${id}`}>
             <UserCog />
           </Link>
         </div>

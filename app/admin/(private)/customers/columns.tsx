@@ -2,18 +2,16 @@
 
 import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, BadgeCheck, BadgeX, UserCog } from "lucide-react";
+import { ArrowUpDown, UserCog } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import React from "react";
-import Image from "next/image";
-import Link from "next/link";
 import { getFormattedDate } from "@/lib/utils";
 import { changeUserAccountStatus } from "@/actions/customers";
 import { toast } from "react-toastify";
+import Link from "next/link";
 
-export type DriversData = {
+export type CustomersData = {
   id: string;
-  imageUrl: string;
   name: string;
   dob: string;
   contactInfo: {
@@ -26,44 +24,15 @@ export type DriversData = {
     addressZipCode: string;
     addressType: number;
   };
-  amountEarned: number;
+  amountSpent: number;
   status: number;
-  isDocumentsVerified: boolean;
 };
 
-export const columns: ColumnDef<DriversData>[] = [
+export const columns: ColumnDef<CustomersData>[] = [
   {
     accessorKey: "id",
     header: "ID",
     cell: ({ row }) => row.getValue("id"),
-  },
-  {
-    accessorKey: "imageUrl",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Profile Image
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const imageUrl: any = row.getValue("imageUrl");
-      return (
-        <div className="flex justify-center">
-          <Image
-            src={imageUrl}
-            alt="profile-image"
-            width={50}
-            height={50}
-            className="w-[50px] h-[50px] rounded-full"
-          />
-        </div>
-      );
-    },
   },
   {
     accessorKey: "name",
@@ -183,47 +152,28 @@ export const columns: ColumnDef<DriversData>[] = [
     cell: ({ row }) => {
       const status: number = row.getValue("status");
       const id: string = row.getValue("id");
-      return <StatusToggle id={id} status={status} />;
-    },
-  },
-  {
-    accessorKey: "isDocumentsVerified",
-    header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Document verified
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const status: number = row.getValue("isDocumentsVerified");
-      return (
-        <div className="flex justify-center">
-          {status ? <BadgeCheck color="#1d873c" /> : <BadgeX color="#ff0000" />}
+        <div>
+          <StatusToggle id={id} status={status} />
         </div>
       );
     },
   },
-
   {
-    accessorKey: "amountEarned",
+    accessorKey: "amountSpent",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Amount Earned
+          Amount Spent
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amountEarned"));
+      const amount = parseFloat(row.getValue("amountSpent"));
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
@@ -250,7 +200,7 @@ export const columns: ColumnDef<DriversData>[] = [
       const id: string = row.getValue("id");
       return (
         <div className="flex justify-center">
-          <Link href={`/drivers/${id}`}>
+          <Link href={`/admin/customers/${id}`}>
             <UserCog />
           </Link>
         </div>

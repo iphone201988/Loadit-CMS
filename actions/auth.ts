@@ -39,7 +39,7 @@ export const changePassword = async (
 
   try {
     const token = cookies().get("token")?.value;
-    if (!token) redirect("/auth/signin", RedirectType.replace);
+    if (!token) redirect("/admin/auth/signin", RedirectType.replace);
 
     const response = await axios.put(
       `${url}/admin/changePassword`,

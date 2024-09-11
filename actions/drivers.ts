@@ -76,7 +76,7 @@ export const getDriverVehicleDocuments = async (driverId: string) => {
     }
     redirect("/auth/sign", RedirectType.replace);
   } catch (error) {
-    redirect("/auth/signin", RedirectType.replace);
+    redirect("/admin/auth/signin", RedirectType.replace);
   }
 };
 
@@ -105,7 +105,7 @@ export const approveDriverVehicleDocuments = async (driverId: string) => {
     }
     redirect("/auth/sign", RedirectType.replace);
   } catch (error) {
-    redirect("/auth/signin", RedirectType.replace);
+    redirect("/admin/auth/signin", RedirectType.replace);
   }
 };
 
@@ -154,6 +154,6 @@ export const getJobs = async (page: number, limit: number, query?: string) => {
     }
     redirect("/auth/sign", RedirectType.replace);
   } catch (error) {
-    redirect("/auth/signin", RedirectType.replace);
+    redirect("/admin/auth/signin", RedirectType.replace);
   }
 };
