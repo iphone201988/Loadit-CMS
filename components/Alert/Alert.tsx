@@ -18,6 +18,7 @@ const Alert = ({ userId }: { userId: string }) => {
     const response = await deleteUser(userId);
     if (response.status == 200) {
       toast.success(response.message);
+      window.location.reload();
     }
   };
   return (
