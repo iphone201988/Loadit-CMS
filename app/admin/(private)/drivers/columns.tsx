@@ -10,6 +10,7 @@ import Link from "next/link";
 import { getFormattedDate } from "@/lib/utils";
 import { changeUserAccountStatus } from "@/actions/customers";
 import { toast } from "react-toastify";
+import Alert from "@/components/Alert/Alert";
 
 export type DriversData = {
   id: string;
@@ -249,10 +250,13 @@ export const columns: ColumnDef<DriversData>[] = [
     cell: ({ row }) => {
       const id: string = row.getValue("id");
       return (
-        <div className="flex justify-center">
+        <div className="flex justify-center space-x-2">
           <Link href={`/admin/drivers/${id}`}>
             <UserCog />
           </Link>
+          <div>
+            <Alert userId={id} />
+          </div>
         </div>
       );
     },

@@ -2,13 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, UserCog } from "lucide-react";
+import { ArrowUpDown, Trash, UserCog } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import React from "react";
 import { getFormattedDate } from "@/lib/utils";
 import { changeUserAccountStatus } from "@/actions/customers";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import Alert from "@/components/Alert/Alert";
 
 export type CustomersData = {
   id: string;
@@ -199,16 +200,18 @@ export const columns: ColumnDef<CustomersData>[] = [
     cell: ({ row }) => {
       const id: string = row.getValue("id");
       return (
-        <div className="flex justify-center">
+        <div className="flex justify-center space-x-2">
           <Link href={`/admin/customers/${id}`}>
             <UserCog />
           </Link>
+          <div>
+            <Alert userId={id} />
+          </div>
         </div>
       );
     },
   },
 ];
-
 const StatusToggle: React.FC<{ id: string; status: number }> = ({
   id,
   status,

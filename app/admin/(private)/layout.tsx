@@ -5,8 +5,8 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Navbar from "@/components/Navbar/Navbar";
 
 export const metadata: Metadata = {
-  title: "Loadit Dashboard",
-  description: "Loadit Dashboard",
+  title: "BTSS Dashboard",
+  description: "BTSS Dashboard",
 };
 
 const CommonLayout = ({

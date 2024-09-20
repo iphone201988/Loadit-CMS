@@ -35,3 +35,28 @@ export const getUserPayments = async (
     redirect("/admin/auth/signin", RedirectType.replace);
   }
 };
+
+export const deleteUser = async (userId: string) => {
+  const url = process.env.API_URL!;
+
+  try {
+    const token = cookies().get("token")?.value;
+
+    if (!token) redirect("/admin/auth/signin", RedirectType.replace);
+
+    const response = await axios.delete(`${url}/admin/deleteUser/${userId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (response.data.success) {
+      return {
+        status: response.status,
+        message: response.data.message,
+      };
+    }
+
+    redirect("/admin/auth/signin", RedirectType.replace);
+  } catch (error) {
+    redirect("/admin/auth/signin", RedirectType.replace);
+  }
+};
