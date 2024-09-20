@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { getFormattedDate } from "@/lib/utils";
+import { getFormattedDate, getFormattedTime } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, Truck } from "lucide-react";
 
@@ -11,12 +11,10 @@ export type DriverJobsData = {
   amount: number;
   pickupDetails: {
     pickUpLocation: string;
-    pickUpDate: string;
-    pickUpTime: string;
+    pickupDateTimeStamp: string;
   };
   dropOffDetails: {
-    dropOffDate: string;
-    dropOffTime: string;
+    dropOffDateTimeStamp: string;
     dropOffs: string;
   };
   jobType: string;
@@ -91,11 +89,12 @@ export const columns: ColumnDef<DriverJobsData>[] = [
       return (
         <div>
           <div>
-            <strong>Pickup Date:</strong>{" "}
-            {getFormattedDate(pickupDetails.pickUpDate)}
+            <strong>Pickup Date:</strong>
+            {getFormattedDate(pickupDetails.pickupDateTimeStamp)}
           </div>
           <div>
-            <strong>Pickup Time:</strong> {pickupDetails.pickUpTime}
+            <strong>Pickup Time:</strong>
+            {getFormattedTime(pickupDetails.pickupDateTimeStamp)}
           </div>
           <div>
             <strong>Pickup Location:</strong> {pickupDetails.pickUpLocation}
@@ -123,15 +122,16 @@ export const columns: ColumnDef<DriverJobsData>[] = [
       return (
         <div>
           <div>
-            <strong>DropOff Date:</strong>{" "}
-            {getFormattedDate(dropOffDetails.dropOffDate)}
+            <strong>DropOff Date:</strong>
+            {getFormattedDate(dropOffDetails.dropOffDateTimeStamp)}
           </div>
           <div>
-            <strong>DropOff Time:</strong> {dropOffDetails.dropOffTime}
+            <strong>DropOff Time:</strong>
+            {getFormattedTime(dropOffDetails.dropOffDateTimeStamp)}
           </div>
           {dropOffDetails.dropOffs.length == 1 ? (
             <div>
-              <strong>DropOff Location:</strong>{" "}
+              <strong>DropOff Location:</strong>
               {dropOffDetails.dropOffs[0].dropOffLocation}
             </div>
           ) : (

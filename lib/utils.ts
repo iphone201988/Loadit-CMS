@@ -10,3 +10,8 @@ export const getFormattedDate = (date: string): string => {
   const formattedDate = moment(date).format("YYYY-MM-DD");
   return formattedDate;
 };
+
+export const getFormattedTime = (date: string): string => {
+  const formattedDate = moment(date).format("hh:mm A");
+  return formattedDate;
+};
