@@ -8,7 +8,7 @@ const authenticatedMiddleware = async (request: NextRequest) => {
 
   try {
     const authSession = request.cookies.get("token")?.value;
-    console.log("authSession:", authSession);
+    // console.log("authSession:", authSession);
 
     if (!authSession) {
       return NextResponse.redirect(url);

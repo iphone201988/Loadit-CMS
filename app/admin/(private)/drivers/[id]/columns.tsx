@@ -3,7 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { getFormattedDate, getFormattedTime } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, Truck } from "lucide-react";
+import { ArrowUpDown, Settings2, Truck } from "lucide-react";
+import Link from "next/link";
 
 export type DriverJobsData = {
   id: string;
@@ -191,6 +192,30 @@ export const columns: ColumnDef<DriverJobsData>[] = [
         >
           {deliveryStatus}
           {deliveryStatus && <Truck />}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "actions",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Actions
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const jobId: string = row.getValue("id");
+      return (
+        <div className="flex items-center justify-center space-x-2 font-bold">
+          <Link href={`/admin/jobs/${jobId}`}>
+            <Settings2 />
+          </Link>
         </div>
       );
     },

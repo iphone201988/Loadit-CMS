@@ -8,32 +8,36 @@ import {
 import { Input } from "@/components/ui/input";
 
 const InputField = ({
-  control,
   name,
   label,
   placeholder,
   type = "text",
+  value,
+  handleChange,
+  readOnly = false,
 }: {
-  control: any;
   name: string;
   label: string;
   placeholder: string;
   type?: string;
+  value?: string;
+  handleChange?: any;
+  readOnly?: boolean;
 }) => {
   return (
-    <FormField
-      control={control}
-      name={name}
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>{label}</FormLabel>
-          <FormControl>
-            <Input placeholder={placeholder} {...field} type={type} />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
+    <>
+      {/* <FormLabel>{label}</FormLabel> */}
+      <label htmlFor={name}>{label}</label>
+      <Input
+        placeholder={placeholder}
+        type={type}
+        name={name}
+        className="block"
+        {...(value && { value })}
+        {...(handleChange && { onChange: handleChange })}
+        readOnly={readOnly}
+      />
+    </>
   );
 };
 

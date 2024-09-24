@@ -15,3 +15,12 @@ export const getFormattedTime = (date: string): string => {
   const formattedDate = moment(date).format("hh:mm A");
   return formattedDate;
 };
+
+export const getUTCTimestamp = (date: string) => {
+  const utcDate = moment.utc(date, "YYYY-MM-DD HH:mm", true);
+
+  if (!utcDate.isValid()) return null;
+
+  const formattedUTCDate = utcDate.format("YYYY-MM-DDTHH:mm:ss.SSSZ");
+  return formattedUTCDate;
+};

@@ -1,12 +1,13 @@
 "use client";
 
-import { getAllDrivers, getJobs } from "@/actions/drivers";
+import { getAllDrivers } from "@/actions/drivers";
 import Paginate from "@/components/Paginate/Paginate";
 import { useEffect, useState } from "react";
 import BeatLoader from "react-spinners/BeatLoader";
 import { DataTable } from "./data-table";
 import { getAllCustomers } from "@/actions/customers";
 import { getUserPayments } from "@/actions/common";
+import { getJobs } from "@/actions/jobs";
 
 interface TableProps {
   heading?: string;
