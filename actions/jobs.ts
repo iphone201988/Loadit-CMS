@@ -122,3 +122,34 @@ export const createJobForCustomer = async (data: any, timezone: string) => {
     };
   }
 };
+
+export const quitJob = async (jobId: string, reason: string) => {
+  const url = process.env.API_URL!;
+
+  try {
+    const token = cookies().get("token")?.value;
+    if (!token) redirect("/admin/auth/signin", RedirectType.replace);
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const response = await axios.put(
+      `${url}/admin/quitJob`,
+      { jobId, reason },
+      config
+    );
+
+    if (response.data.success) {
+      return {
+        status: response.status,
+        message: response.data.message,
+      };
+    }
+
+    redirect("/admin/auth/sigin", RedirectType.replace);
+  } catch (error) {
+    redirect("/admin/auth/signin", RedirectType.replace);
+  }
+};

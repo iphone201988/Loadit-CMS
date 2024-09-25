@@ -1,9 +1,10 @@
 "use client";
 
+import QuitJobPopup from "@/components/QuitJobPopup/QuitJobPopup";
 import { Button } from "@/components/ui/button";
 import { getFormattedDate, getFormattedTime } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, Settings2, Truck } from "lucide-react";
+import { ArrowUpDown, Truck } from "lucide-react";
 import Link from "next/link";
 
 export type JobsData = {
@@ -212,11 +213,13 @@ export const columns: ColumnDef<JobsData>[] = [
     },
     cell: ({ row }) => {
       const jobId: string = row.getValue("id");
+      const deliveryStatus: any = row.getValue("deliveryStatus");
       return (
         <div className="flex items-center justify-center space-x-2 font-bold">
           <Link href={`/admin/jobs/${jobId}`}>
-            <Settings2 />
+            <Button className="bg-orange-500 hover:bg-orange-600">View</Button>
           </Link>
+          {deliveryStatus == "IN_PROGRESS" && <QuitJobPopup jobId={jobId} />}
         </div>
       );
     },
