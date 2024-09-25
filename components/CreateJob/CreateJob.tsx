@@ -191,14 +191,15 @@ const CreateJob = ({ userId }: { userId: string }) => {
       ))}
 
       <div className="flex items-center space-x-1">
-        <CirclePlus />
         <button
           type="button"
           onClick={() => {
             setDropOffs([...dropOffs, { ...initialDropOffState }]);
           }}
+          className="flex items-center"
         >
-          Add dropOff location
+          <CirclePlus />
+          <span className="ml-1"> Add dropOff location</span>
         </button>
       </div>
 
