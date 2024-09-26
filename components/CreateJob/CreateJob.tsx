@@ -81,8 +81,15 @@ const CreateJob = ({ userId }: { userId: string }) => {
     }
   };
 
+
+  const keyDownHandler = (e: any) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
+  };
+  
   return (
-    <form onSubmit={onSubmit} className="space-y-8 w-full">
+    <form onSubmit={onSubmit} onKeyDown={keyDownHandler} className="space-y-8 w-full">
       {showLoader && (
         <div className="fixed inset-0 z-10 bg-white opacity-70"></div>
       )}
