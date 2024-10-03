@@ -27,16 +27,14 @@ export const getJobs = async (page: number, limit: number, query?: string) => {
       const data = jobs.map((job: any) => ({
         id: job._id,
         title: job.title,
-        amount: job.amount,
+        amount: job.total,
         pickupDetails: {
           pickUpLocation: job.pickUpLocation,
-          pickUpDate: job.pickUpDate,
-          pickUpTime: job.pickUpTime,
+          pickupDateTimeStamp: job.pickupDateTimeStamp,
         },
         dropOffDetails: {
-          dropOffDate: job.dropOffDate,
-          dropOffTime: job.dropOffTime,
           dropOffs: job.dropOffs,
+          dropOffDateTimeStamp: job.dropOffDateTimeStamp,
         },
         jobType: job.jobType,
         orderNo: job.orderNo,

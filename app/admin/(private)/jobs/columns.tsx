@@ -88,14 +88,15 @@ export const columns: ColumnDef<JobsData>[] = [
     },
     cell: ({ row }) => {
       const pickupDetails: any = row.getValue("pickupDetails");
+      console.log("pickupDetails::::",pickupDetails)
       return (
         <div>
           <div>
-            <strong>Pickup Date:</strong>{" "}
+            <strong>Pickup Date:</strong>
             {getFormattedDate(pickupDetails.pickupDateTimeStamp)}
           </div>
           <div>
-            <strong>Pickup Time:</strong>{" "}
+            <strong>Pickup Time:</strong>
             {getFormattedTime(pickupDetails.pickupDateTimeStamp)}
           </div>
           <div>
