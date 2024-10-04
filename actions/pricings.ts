@@ -21,14 +21,7 @@ export const getPricings = async () => {
     if (response.data.success) {
       return {
         status: response.status,
-        pricings: {
-          small: response.data?.pricings?.small,
-          medium: response.data?.pricings?.medium,
-          large: response.data?.pricings?.large,
-          largeBase: response.data?.pricings?.largeBase,
-          superLarge: response.data?.pricings?.superLarge,
-          superLargeBase: response.data?.pricings?.superLargeBase,
-        },
+        pricings: response.data?.pricings,
       };
     }
     redirect("/auth/sign", RedirectType.replace);
@@ -44,6 +37,8 @@ type PricingProps = {
   largeBase?: number;
   superLarge?: number;
   superLargeBase?: number;
+  commission?: number;
+  tax?: number;
 };
 
 export const updatePricings = async ({
@@ -53,6 +48,8 @@ export const updatePricings = async ({
   largeBase,
   superLarge,
   superLargeBase,
+  commission,
+  tax,
 }: PricingProps) => {
   const url = process.env.API_URL;
 
@@ -69,6 +66,8 @@ export const updatePricings = async ({
     if (largeBase) data.largeBase = largeBase;
     if (superLarge) data.superLarge = superLarge;
     if (superLargeBase) data.superLargeBase = superLargeBase;
+    if (commission) data.commission = commission;
+    if (tax) data.tax = tax;
 
     const response = await axios.patch(`${url}/admin/updatePricings`, data, {
       headers: {

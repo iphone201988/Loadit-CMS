@@ -36,6 +36,8 @@ const formSchema = z.object({
   largeBase: z.number().nullable(),
   superLarge: z.number().nullable(),
   superLargeBase: z.number().nullable(),
+  commission: z.number().nullable(),
+  tax: z.number().nullable(),
 });
 
 const Pricings = () => {
@@ -50,21 +52,33 @@ const Pricings = () => {
       largeBase: null,
       superLarge: null,
       superLargeBase: null,
+      commission: null,
+      tax: null,
     },
   });
 
   const { reset, control, handleSubmit } = form;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const { small, medium, large, largeBase, superLarge, superLargeBase } =
-      values;
+    const {
+      small,
+      medium,
+      large,
+      largeBase,
+      superLarge,
+      superLargeBase,
+      commission,
+      tax,
+    } = values;
     if (
       small == 0 ||
       medium == 0 ||
       large == 0 ||
       largeBase == 0 ||
       superLarge == 0 ||
-      superLargeBase == 0
+      superLargeBase == 0 ||
+      commission == 0 ||
+      tax == 0
     ) {
       toast.error("Zero is not allowed for any value");
       return;
@@ -78,6 +92,8 @@ const Pricings = () => {
     if (largeBase) numericValues.largeBase = largeBase;
     if (superLarge) numericValues.superLarge = superLarge;
     if (superLargeBase) numericValues.superLargeBase = superLargeBase;
+    if (commission) numericValues.commission = commission;
+    if (tax) numericValues.tax = tax;
 
     if (Object.keys(numericValues).length) {
       setShowLoader(true);
@@ -101,6 +117,8 @@ const Pricings = () => {
           largeBase: response.pricings.largeBase ?? null,
           superLarge: response.pricings.superLarge ?? null,
           superLargeBase: response.pricings.superLargeBase ?? null,
+          commission: response.pricings.commission ?? null,
+          tax: response.pricings.tax ?? null,
         });
       }
     })();
@@ -117,10 +135,59 @@ const Pricings = () => {
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
               <CardHeader>
                 <CardTitle className="text-4xl">Manage Pricings</CardTitle>
-                <CardDescription>Update per mile pricings</CardDescription>
+                <CardDescription>Update all pricings</CardDescription>
               </CardHeader>
               <CardContent className="w-full">
                 <div className="flex flex-col space-y-5">
+                  <div className="flex space-x-5">
+                    <div className="w-full">
+                      <FormField
+                        control={control}
+                        name="commission"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Commission</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Commission"
+                                {...field}
+                                type="number"
+                                value={field.value ?? ""}
+                                onChange={(e) =>
+                                  field.onChange(Number(e.target.value))
+                                }
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <div className="w-full">
+                      <FormField
+                        control={control}
+                        name="tax"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Tax</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Tax"
+                                {...field}
+                                type="number"
+                                value={field.value ?? ""}
+                                onChange={(e) =>
+                                  field.onChange(Number(e.target.value))
+                                }
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+
                   <div className="flex space-x-5">
                     <div className="w-full">
                       <FormField

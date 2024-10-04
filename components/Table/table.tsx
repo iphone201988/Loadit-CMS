@@ -8,6 +8,7 @@ import { DataTable } from "./data-table";
 import { getAllCustomers } from "@/actions/customers";
 import { getUserPayments } from "@/actions/common";
 import { getJobs } from "@/actions/jobs";
+import { getZipCodes } from "@/actions/zipcodes";
 
 interface TableProps {
   heading?: string;
@@ -17,7 +18,8 @@ interface TableProps {
     | "driverJobs"
     | "payments"
     | "customerJobs"
-    | "jobs";
+    | "jobs"
+    | "zipCodes";
   userId?: string;
   url: string;
   columns: any;
@@ -58,7 +60,9 @@ const TableComponent = ({
     }
     if (type == "payments") {
       response = await getUserPayments(userId!, page, limit);
-      console.log("response::::", response);
+    }
+    if (type == "zipCodes") {
+      response = await getZipCodes(page, limit);
     }
 
     console.log("response.data", response?.data);

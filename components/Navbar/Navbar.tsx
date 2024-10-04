@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   LockKeyhole,
   LogOut,
+  MapPin,
   Users,
 } from "lucide-react";
 import Image from "next/image";
@@ -52,6 +53,12 @@ const Navbar = () => {
               <li className="flex justify-center items-center my-4">
                 <DollarSign className="mr-2" />
                 Manage Pricings
+              </li>
+            </Link>
+            <Link href="/admin/zip-codes">
+              <li className="flex justify-center items-center my-4">
+                <MapPin className="mr-2" />
+                Zip Codes
               </li>
             </Link>
             <Link href="/admin/change-password">
