@@ -51,7 +51,10 @@ export const getZipCodes = async (page: number, limit: number) => {
         Authorization: `Bearer ${token}`,
       },
     };
-    const response = await axios.get(`${url}/admin/getZipCodes`, config);
+    const response = await axios.get(
+      `${url}/admin/getZipCodes?page=${page}&limit=${limit}`,
+      config
+    );
     if (response.data.success) {
       return {
         status: response.status,
