@@ -10,7 +10,7 @@ import Link from "next/link";
 import { getFormattedDate } from "@/lib/utils";
 import { changeUserAccountStatus } from "@/actions/customers";
 import { toast } from "react-toastify";
-import Alert from "@/components/Alert/Alert";
+import DeletePopup from "@/components/DeletePopup/DeletePopup";
 
 export type DriversData = {
   id: string;
@@ -255,7 +255,7 @@ export const columns: ColumnDef<DriversData>[] = [
             <UserCog />
           </Link>
           <div>
-            <Alert userId={id} />
+            <DeletePopup id={id} type="user"/>
           </div>
         </div>
       );

@@ -1,5 +1,6 @@
 "use client";
 
+import DeletePopup from "@/components/DeletePopup/DeletePopup";
 import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
@@ -72,6 +73,28 @@ export const columns: ColumnDef<ZipCodes>[] = [
           Type
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
+      );
+    },
+  },
+  {
+    accessorKey: "actions",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Actions
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const zipCodeId: string = row.getValue("id");
+      return (
+        <div className="w-fit mx-auto cursor-pointer">
+          <DeletePopup id={zipCodeId} type="zipCode" />
+        </div>
       );
     },
   },

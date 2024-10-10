@@ -2,17 +2,25 @@
 
 import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, Trash, UserCog } from "lucide-react";
+import {
+  ArrowUpDown,
+  BadgeCheck,
+  BadgeX,
+  ScanSearch,
+  UserCog,
+} from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import React from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { getFormattedDate } from "@/lib/utils";
 import { changeUserAccountStatus } from "@/actions/customers";
 import { toast } from "react-toastify";
-import Link from "next/link";
-import DeletePopup from "@/components/DeletePopup/DeletePopup";
+import Alert from "@/components/DeletePopup/DeletePopup";
 
-export type CustomersData = {
+export type DriversData = {
   id: string;
+  imageUrl: string;
   name: string;
   dob: string;
   contactInfo: {
@@ -25,15 +33,41 @@ export type CustomersData = {
     addressZipCode: string;
     addressType: number;
   };
-  amountSpent: number;
-  status: number;
 };
 
-export const columns: ColumnDef<CustomersData>[] = [
+export const columns: ColumnDef<DriversData>[] = [
   {
     accessorKey: "id",
     header: "ID",
     cell: ({ row }) => row.getValue("id"),
+  },
+  {
+    accessorKey: "imageUrl",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Profile Image
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const imageUrl: any = row.getValue("imageUrl");
+      return (
+        <div className="flex justify-center">
+          <Image
+            src={imageUrl}
+            alt="profile-image"
+            width={50}
+            height={50}
+            className="w-[50px] h-[50px] rounded-full"
+          />
+        </div>
+      );
+    },
   },
   {
     accessorKey: "name",
@@ -138,52 +172,6 @@ export const columns: ColumnDef<CustomersData>[] = [
     },
   },
   {
-    accessorKey: "status",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Status
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const status: number = row.getValue("status");
-      const id: string = row.getValue("id");
-      return (
-        <div>
-          <StatusToggle id={id} status={status} />
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "amountSpent",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Amount Spent
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amountSpent"));
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount);
-
-      return <div>{formatted}</div>;
-    },
-  },
-  {
     accessorKey: "actions",
     header: ({ column }) => {
       return (
@@ -201,17 +189,15 @@ export const columns: ColumnDef<CustomersData>[] = [
       const id: string = row.getValue("id");
       return (
         <div className="flex justify-center space-x-2">
-          <Link href={`/admin/customers/${id}`}>
-            <UserCog />
+          <Link href={`/admin/driver-documents/${id}`}>
+            <ScanSearch size={30} />
           </Link>
-          <div>
-            <DeletePopup id={id} type="user" />
-          </div>
         </div>
       );
     },
   },
 ];
+
 const StatusToggle: React.FC<{ id: string; status: number }> = ({
   id,
   status,

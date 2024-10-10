@@ -11,9 +11,17 @@ import {
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import ApproveDocuments from "./ApproveDocuments";
+import moment from "moment";
 
-const DriverDocuments = async ({ id }: { id: string }) => {
-  const driverDocuments = await getDriverVehicleDocuments(id);
+// VERIFICATION: 1, REVERIFICATION: 2
+
+interface DriverDocumentsProps {
+  url: string;
+  type: 1 | 2;
+}
+
+const DriverDocuments = async ({ url, type }: DriverDocumentsProps) => {
+  const driverDocuments = await getDriverVehicleDocuments(url);
   const data = driverDocuments.data.driver;
 
   return (
@@ -41,7 +49,9 @@ const DriverDocuments = async ({ id }: { id: string }) => {
                 <Input
                   name="carInsuranceNumberExpDate"
                   disabled
-                  value={data?.carInsuranceNumberExpDate}
+                  value={moment(data?.carInsuranceNumberExpDate).format(
+                    "YYYY-MM-DD"
+                  )}
                 />
               </div>
             </div>
@@ -57,6 +67,19 @@ const DriverDocuments = async ({ id }: { id: string }) => {
                 />
               </div>
               <div className="w-full">
+                <label htmlFor="drivingLicenseExpDate">
+                  Driving License Expiry Date
+                </label>
+                <Input
+                  name="drivingLicenseExpDate"
+                  disabled
+                  value={data?.drivingLicenseExpDate}
+                />
+              </div>
+            </div>
+
+            <div className="flex space-x-5">
+              <div className="w-full">
                 <label htmlFor="licensePlate">License Plate</label>
                 <Input
                   name="licensePlate"
@@ -64,8 +87,6 @@ const DriverDocuments = async ({ id }: { id: string }) => {
                   value={data?.licensePlate}
                 />
               </div>
-            </div>
-            <div className="flex space-x-5">
               <div className="w-full">
                 <label htmlFor="socialSecurityNumber">
                   Social Security Number
@@ -76,7 +97,9 @@ const DriverDocuments = async ({ id }: { id: string }) => {
                   value={data?.socialSecurityNumber}
                 />
               </div>
+            </div>
 
+            <div className="flex space-x-5">
               <div className="w-full">
                 <label htmlFor="vehicleNumber">Vehicle Number</label>
                 <Input
@@ -113,23 +136,37 @@ const DriverDocuments = async ({ id }: { id: string }) => {
                   className="w-[300px] h-[200px] object-contain bg-zinc-100"
                 />
               </div>
-              <div className="w-full">
-                <label htmlFor="vehicleImage">Vehicle Image</label>
-                <Image
-                  src={data?.vehicleImage}
-                  alt="vehicleImage"
-                  width={200}
-                  height={200}
-                  className="w-[300px] h-[200px] object-contain bg-zinc-100"
-                />
-              </div>
+              {data?.vehicleImage && (
+                <div className="w-full">
+                  <label htmlFor="vehicleImage">Vehicle Image</label>
+                  <Image
+                    src={data.vehicleImage}
+                    alt="vehicleImage"
+                    width={200}
+                    height={200}
+                    className="w-[300px] h-[200px] object-contain bg-zinc-100"
+                  />
+                </div>
+              )}
             </div>
           </div>
         </CardContent>
-        <CardFooter className="flex justify-end">
+        <CardFooter className="flex justify-end space-x-4">
+          {type == 2 && (
+            <ApproveDocuments
+              id={data?._id}
+              isDocumentsVerified={data?.isDocumentsVerified}
+              btnText="Disapprove Documents"
+              type={type}
+              approve={false}
+            />
+          )}
           <ApproveDocuments
             id={data?._id}
             isDocumentsVerified={data?.isDocumentsVerified}
+            btnText="Approve Documents"
+            type={type}
+            approve={true}
           />
         </CardFooter>
       </Card>

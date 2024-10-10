@@ -3,6 +3,7 @@
 import axios from "axios";
 import { cookies } from "next/headers";
 import { RedirectType, redirect } from "next/navigation";
+import { toast } from "react-toastify";
 
 export const getAllDrivers = async (page: number, limit: number) => {
   const url = process.env.API_URL;
@@ -52,21 +53,18 @@ export const getAllDrivers = async (page: number, limit: number) => {
   }
 };
 
-export const getDriverVehicleDocuments = async (driverId: string) => {
+export const getDriverVehicleDocuments = async (endpoint: string) => {
   const url = process.env.API_URL;
   try {
     const token = cookies().get("token")?.value;
     if (!token) {
       redirect("/auth/sigin", RedirectType.replace);
     }
-    const response = await axios.get(
-      `${url}/admin/getDriverVehichleDetails/${driverId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await axios.get(`${url}/${endpoint}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (response.data.success) {
       return {
@@ -80,22 +78,21 @@ export const getDriverVehicleDocuments = async (driverId: string) => {
   }
 };
 
-export const approveDriverVehicleDocuments = async (driverId: string) => {
+export const approveDriverVehicleDocuments = async (
+  endpoint: string,
+  body: any
+) => {
   const url = process.env.API_URL;
   try {
     const token = cookies().get("token")?.value;
     if (!token) {
       redirect("/auth/sigin", RedirectType.replace);
     }
-    const response = await axios.patch(
-      `${url}/admin/approveDriverDocuments/${driverId}`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await axios.patch(`${url}/${endpoint}`, body, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (response.data.success) {
       return {
@@ -108,3 +105,82 @@ export const approveDriverVehicleDocuments = async (driverId: string) => {
     redirect("/admin/auth/signin", RedirectType.replace);
   }
 };
+
+export const getDriversForDocumentsVerification = async (
+  page: number,
+  limit: number
+) => {
+  const url = process.env.API_URL!;
+  try {
+    const token = cookies().get("token")?.value;
+    if (!token) redirect("/auth/signin", RedirectType.replace);
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const response = await axios.get(
+      `${url}/admin/getDriversForDocumentsVerification?page=${page}&limit=${limit}`,
+      config
+    );
+
+    if (response.data.success) {
+      const { drivers, total } = response.data;
+      return {
+        status: response.status,
+        data: drivers.map((driver: any) => ({
+          id: driver._id,
+          imageUrl: driver.driverImage,
+          name: driver.name,
+          contactInfo: { email: driver?.email, phone: driver?.phone },
+          dob: driver.dob,
+          address: {
+            state: driver?.address?.state,
+            zipCode: driver?.address?.zipCode,
+            addressZipCode: driver?.address?.addressZipCode,
+            addressType: driver?.address?.addressType,
+          },
+        })),
+        total,
+      };
+    }
+    redirect("/auth/signin", RedirectType.replace);
+  } catch (error: any) {
+    if (error.response.data.status == 401)
+      redirect("/auth/signin", RedirectType.replace);
+
+    toast.error(error.response.data.message);
+  }
+};
+
+// export const getDocumentsById = async (driverId: string) => {
+//   const url = process.env.API_URL!;
+//   try {
+//     const token = cookies().get("token")?.value;
+//     if (token) redirect("/auth/signin", RedirectType.replace);
+
+//     const config = {
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//       },
+//     };
+
+//     const response = await axios.get(
+//       `${url}/admin/getDocumentsById/${driverId}`,
+//       config
+//     );
+
+//     if (response.data.success) {
+//       return { status: response.status, data: {} };
+//     }
+
+//     redirect("/auth/signin", RedirectType.replace);
+//   } catch (error: any) {
+//     if (error.response.data.status == 401)
+//       redirect("/auth/signin", RedirectType.replace);
+
+//     toast.error(error.response.data.message);
+//   }
+// };

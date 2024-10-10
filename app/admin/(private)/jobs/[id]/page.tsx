@@ -40,9 +40,9 @@ const JobDetails = async ({ params }: { params: { id: string } }) => {
 
             <div className="flex space-x-5">
               <div className="w-full">
-                <label htmlFor="carInsuranceNumberExpDate">Tax</label>
+                <label htmlFor="tax">Tax</label>
                 <Input
-                  name="carInsuranceNumberExpDate"
+                  name="tax"
                   disabled
                   value={job.tax}
                 />
@@ -60,9 +60,9 @@ const JobDetails = async ({ params }: { params: { id: string } }) => {
 
             <div className="flex space-x-5">
               <div className="w-full">
-                <label htmlFor="carInsuranceNumberExpDate">Total</label>
+                <label htmlFor="total">Total</label>
                 <Input
-                  name="carInsuranceNumberExpDate"
+                  name="total"
                   disabled
                   value={job.total}
                 />

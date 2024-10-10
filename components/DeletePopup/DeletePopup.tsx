@@ -1,4 +1,5 @@
 import { deleteUser } from "@/actions/common";
+import { deleteZipCode } from "@/actions/zipcodes";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,10 +14,30 @@ import {
 import { Trash } from "lucide-react";
 import { toast } from "react-toastify";
 
-const Alert = ({ userId }: { userId: string }) => {
+interface DeletePopupProps {
+  id: string;
+  type: "user" | "zipCode";
+}
+
+const DeletePopup = ({ id, type }: DeletePopupProps) => {
+  const descMap = {
+    user: {
+      title: "Are you sure you want to delete this account?",
+      description:
+        "This action cannot be undone. This will permanently delete user account",
+    },
+    zipCode: {
+      title: "Are you sure you want to delete this zipcode?",
+      description:
+        "This action cannot be undone. This will permanently delete zipcode",
+    },
+  };
   const handleClick = async () => {
-    const response = await deleteUser(userId);
-    if (response.status == 200) {
+    let response;
+    if (type == "user") response = await deleteUser(id);
+    if (type == "zipCode") response = await deleteZipCode(id);
+
+    if (response?.status == 200) {
       toast.success(response.message);
       window.location.reload();
     }
@@ -28,12 +49,9 @@ const Alert = ({ userId }: { userId: string }) => {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>
-            Are you sure you want to delete this account?
-          </AlertDialogTitle>
+          <AlertDialogTitle>{descMap[type].title}</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete user
-            account
+            {descMap[type].description}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -42,7 +60,7 @@ const Alert = ({ userId }: { userId: string }) => {
             className="bg-orange-500 hover:bg-orange-600"
             onClick={handleClick}
           >
-            Continue
+            Delete
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
@@ -50,4 +68,4 @@ const Alert = ({ userId }: { userId: string }) => {
   );
 };
 
-export default Alert;
+export default DeletePopup;

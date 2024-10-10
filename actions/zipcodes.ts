@@ -58,12 +58,45 @@ export const getZipCodes = async (page: number, limit: number) => {
     if (response.data.success) {
       return {
         status: response.status,
-        data: response.data.zipCodes,
+        data: response.data.zipCodes.map((zipcode: any) => ({
+          ...zipcode,
+          id: zipcode._id,
+        })),
         total: response.data.total,
       };
     }
     redirect("/admin/auth/signin", RedirectType.replace);
   } catch (error) {
+    redirect("/admin/auth/signin", RedirectType.replace);
+  }
+};
+
+export const deleteZipCode = async (zipCodeId: string) => {
+  const url = process.env.API_URL!;
+  try {
+    const token = cookies().get("token")?.value;
+    if (!token) redirect("/admin/auth/signin", RedirectType.replace);
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const response = await axios.delete(
+      `${url}/admin/deleteZipCode/${zipCodeId}`,
+      config
+    );
+
+    if (response.data.success) {
+      return {
+        status: response.status,
+        message: response.data.message,
+      };
+    }
+    redirect("/admin/auth/signin", RedirectType.replace);
+  } catch (error) {
+    console.log("error::::", error);
     redirect("/admin/auth/signin", RedirectType.replace);
   }
 };

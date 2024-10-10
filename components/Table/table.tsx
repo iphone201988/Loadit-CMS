@@ -1,6 +1,9 @@
 "use client";
 
-import { getAllDrivers } from "@/actions/drivers";
+import {
+  getAllDrivers,
+  getDriversForDocumentsVerification,
+} from "@/actions/drivers";
 import Paginate from "@/components/Paginate/Paginate";
 import { useEffect, useState } from "react";
 import BeatLoader from "react-spinners/BeatLoader";
@@ -19,7 +22,8 @@ interface TableProps {
     | "payments"
     | "customerJobs"
     | "jobs"
-    | "zipCodes";
+    | "zipCodes"
+    | "driverDocuments";
   userId?: string;
   url: string;
   columns: any;
@@ -63,6 +67,9 @@ const TableComponent = ({
     }
     if (type == "zipCodes") {
       response = await getZipCodes(page, limit);
+    }
+    if (type == "driverDocuments") {
+      response = await getDriversForDocumentsVerification(page, limit);
     }
 
     console.log("response.data", response?.data);

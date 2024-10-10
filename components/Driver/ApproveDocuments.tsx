@@ -9,20 +9,37 @@ import { useState } from "react";
 const ApproveDocuments = ({
   id,
   isDocumentsVerified,
+  btnText,
+  type,
+  approve,
 }: {
   id: string;
   isDocumentsVerified: boolean;
+  btnText: string;
+  type: number;
+  approve: boolean;
 }) => {
   const [showLoader, setShowLoader] = useState(false);
   const router = useRouter();
 
   const handleOnClick = async (id: string) => {
     setShowLoader(true);
-    const response = await approveDriverVehicleDocuments(id);
+    let url = "";
+    let body = {};
+    if (type == 1) url = `admin/approveDriverDocuments/${id}`;
+    if (type == 2) {
+      url = `admin/updateDriverDocuments/${id}`;
+      body = { approve };
+    }
+    const response = await approveDriverVehicleDocuments(url, body);
     setShowLoader(false);
     const message = response.message;
     toast.success(message);
-    router.refresh();
+    if (type == 1) {
+      router.refresh();
+    } else {
+      router.push("/admin/driver-documents");
+    }
   };
   return (
     <>
@@ -32,7 +49,7 @@ const ApproveDocuments = ({
         disabled={isDocumentsVerified}
         onClick={() => handleOnClick(id)}
       >
-        Approve Documents
+        {btnText}
       </Button>
     </>
   );

@@ -19,7 +19,10 @@ const DriverDetails = ({ params }: { params: { id: string } }) => {
           </TabsList>
 
           <TabsContent value="documents">
-            <DriverDocuments id={userId} />
+            <DriverDocuments
+              url={`admin/getDriverVehichleDetails/${userId}`}
+              type={1}
+            />
           </TabsContent>
 
           <TabsContent value="jobs" className="h-full">

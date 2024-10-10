@@ -3,6 +3,7 @@ import {
   BriefcaseBusiness,
   CarFront,
   DollarSign,
+  FileStack,
   LayoutDashboard,
   LockKeyhole,
   LogOut,
@@ -47,6 +48,12 @@ const Navbar = () => {
               <li className="flex justify-center items-center my-4">
                 <BriefcaseBusiness className="mr-2" />
                 Jobs
+              </li>
+            </Link>
+            <Link href="/admin/driver-documents">
+              <li className="flex justify-center items-center my-4">
+                <FileStack className="mr-2" />
+                Documents
               </li>
             </Link>
             <Link href="/admin/pricings">
