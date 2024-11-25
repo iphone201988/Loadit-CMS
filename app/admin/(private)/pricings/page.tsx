@@ -77,8 +77,7 @@ const Pricings = () => {
       largeBase == 0 ||
       superLarge == 0 ||
       superLargeBase == 0 ||
-      commission == 0 ||
-      tax == 0
+      commission == 0
     ) {
       toast.error("Zero is not allowed for any value");
       return;
