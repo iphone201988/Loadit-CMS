@@ -11,6 +11,7 @@ import MapInput from "../Map/Map";
 import { createJobForCustomer } from "@/actions/jobs";
 import { toast } from "react-toastify";
 import BeatLoader from "react-spinners/BeatLoader";
+import { validateAddress } from "@/actions/customers";
 
 const initialDropOffState = {
   dropOffLocation: "",
@@ -81,15 +82,18 @@ const CreateJob = ({ userId }: { userId: string }) => {
     }
   };
 
-
   const keyDownHandler = (e: any) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
     }
   };
-  
+
   return (
-    <form onSubmit={onSubmit} onKeyDown={keyDownHandler} className="space-y-8 w-full">
+    <form
+      onSubmit={onSubmit}
+      onKeyDown={keyDownHandler}
+      className="space-y-8 w-full"
+    >
       {showLoader && (
         <div className="fixed inset-0 z-10 bg-white opacity-70"></div>
       )}
@@ -110,7 +114,13 @@ const CreateJob = ({ userId }: { userId: string }) => {
             name="pickUpLocation"
             label="Pickup Location"
             placeholder="Pickup Location"
-            handleChange={(location: string, lat: string, lng: string) => {
+            setShowLoader={setShowLoader}
+            pickup={true}
+            handleChange={async (
+              location: string,
+              lat: string,
+              lng: string
+            ) => {
               setFormValues({
                 ...formValues,
                 pickUpLocation: location,
@@ -194,6 +204,7 @@ const CreateJob = ({ userId }: { userId: string }) => {
           index={index}
           setDropOffs={setDropOffs}
           allDropOffs={dropOffs}
+          setShowLoader={setShowLoader}
         />
       ))}
 

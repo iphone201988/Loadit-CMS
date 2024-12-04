@@ -6,17 +6,21 @@ import InputField from "../Input/Input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import MapInput from "../Map/Map";
 import { Controller } from "react-hook-form";
+import { validateAddress } from "@/actions/customers";
+import { toast } from "react-toastify";
 
 const DropOffs = ({
   dropOff,
   index,
   setDropOffs,
   allDropOffs,
+  setShowLoader
 }: {
   dropOff: any;
   index: number;
   setDropOffs: any;
   allDropOffs: any;
+  setShowLoader: any;
 }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const updatedDropOff = {
@@ -72,7 +76,13 @@ const DropOffs = ({
                 name="dropOffLocation"
                 label="DropOff Location"
                 placeholder="DropOff Location"
-                handleChange={(location: string, lat: string, lng: string) => {
+                setShowLoader={setShowLoader}
+                pickup={false}
+                handleChange={async (
+                  location: string,
+                  lat: string,
+                  lng: string
+                ) => {
                   handleLocationChange(location, lat, lng);
                 }}
               />

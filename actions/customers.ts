@@ -57,8 +57,8 @@ export const changeUserAccountStatus = async (
   try {
     const token = cookies().get("token")?.value;
     if (!token) redirect("auth/signin", RedirectType.replace);
-    console.log("token::",token)
-    
+    console.log("token::", token);
+
     const response = await axios.put(
       `${url}/admin/changeUserStatus`,
       { userId, status },
@@ -75,5 +75,39 @@ export const changeUserAccountStatus = async (
     redirect("auth/signin", RedirectType.replace);
   } catch (error) {
     redirect("auth/signin", RedirectType.replace);
+  }
+};
+
+export const validateAddress = async (
+  latitude: number,
+  longitude: number,
+  pickup: boolean
+) => {
+  const url = process.env.API_URL;
+  try {
+    const token = cookies().get("token")?.value;
+    if (!token) {
+      redirect("auth/signin", RedirectType.replace);
+    }
+    const response = await axios.get(
+      `${url}/admin/validateAddress?latitude=${latitude}&longitude=${longitude}&pickup=${pickup}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return {
+      status: response.status,
+      success: response.data.success,
+      message: response.data.message,
+    };
+  } catch (error: any) {
+    return {
+      status: error.response.status,
+      success: error.response.data.success,
+      message: error.response.data.message,
+    };
   }
 };

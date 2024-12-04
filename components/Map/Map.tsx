@@ -8,12 +8,16 @@ import {
   Autocomplete,
 } from "@react-google-maps/api";
 import InputField from "../Input/Input";
+import { validateAddress } from "@/actions/customers";
+import { toast } from "react-toastify";
 
 interface MapInputProps {
   name: string;
   label: string;
   placeholder: string;
   handleChange?: any;
+  setShowLoader: any;
+  pickup: boolean;
 }
 
 const MapInput = ({
@@ -21,6 +25,8 @@ const MapInput = ({
   label,
   placeholder,
   handleChange,
+  setShowLoader,
+  pickup,
 }: MapInputProps) => {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY!,
@@ -41,10 +47,19 @@ const MapInput = ({
     const geocoder = geocoderRef.current;
     const location = { lat, lng };
 
-    geocoder.geocode({ location }, (results, status) => {
+    geocoder.geocode({ location }, async (results, status) => {
       if (status === "OK" && results && results[0]) {
         setAddress(results[0].formatted_address);
-        handleChange(results[0].formatted_address, lat, lng);
+        setShowLoader(true);
+        const response: any = await validateAddress(lat, lng, pickup);
+        setShowLoader(false);
+
+        if (response.success) {
+          handleChange(results[0].formatted_address, lat, lng, setAddress);
+        } else {
+          toast.error(response.message);
+          setAddress("");
+        }
       } else {
         setAddress("Address not found");
       }
@@ -157,7 +172,7 @@ const MapInput = ({
                 }}
                 onChange={(e) => {
                   setAddress(e.target.value);
-                  setShowMap(true)
+                  setShowMap(true);
                 }}
                 value={address}
                 onClick={() => setShowMap(!showMap)}
