@@ -14,6 +14,7 @@ import ApproveDocuments from "./ApproveDocuments";
 import moment from "moment";
 
 // VERIFICATION: 1, REVERIFICATION: 2
+// VIEW: 1, VERIFICATION: 2
 
 interface DriverDocumentsProps {
   url: string;
@@ -73,7 +74,9 @@ const DriverDocuments = async ({ url, type }: DriverDocumentsProps) => {
                 <Input
                   name="drivingLicenseExpDate"
                   disabled
-                  value={data?.drivingLicenseExpDate}
+                  value={moment(data?.drivingLicenseExpDate).format(
+                    "YYYY-MM-DD"
+                  )}
                 />
               </div>
             </div>
@@ -153,21 +156,23 @@ const DriverDocuments = async ({ url, type }: DriverDocumentsProps) => {
         </CardContent>
         <CardFooter className="flex justify-end space-x-4">
           {type == 2 && (
-            <ApproveDocuments
-              id={data?._id}
-              isDocumentsVerified={data?.isDocumentsVerified}
-              btnText="Disapprove Documents"
-              type={type}
-              approve={false}
-            />
+            <>
+              <ApproveDocuments
+                id={data?._id}
+                isDocumentsVerified={data?.isDocumentsVerified}
+                btnText="Disapprove Documents"
+                type={type}
+                approve={false}
+              />
+              <ApproveDocuments
+                id={data?._id}
+                isDocumentsVerified={data?.isDocumentsVerified}
+                btnText="Approve Documents"
+                type={type}
+                approve={true}
+              />
+            </>
           )}
-          <ApproveDocuments
-            id={data?._id}
-            isDocumentsVerified={data?.isDocumentsVerified}
-            btnText="Approve Documents"
-            type={type}
-            approve={true}
-          />
         </CardFooter>
       </Card>
     </div>
